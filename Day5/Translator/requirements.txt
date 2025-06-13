@@ -9,3 +9,10 @@ langchain-community
 faiss-cpu
 google-api-python-client
 python-dotenv
+
+streamlit
+langchain
+langchain-community
+faiss-cpu
+langchain-google-genai
+python-dotenv
