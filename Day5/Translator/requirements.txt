@@ -3,16 +3,13 @@ langchain-google-genai>=0.0.10
 google-generativeai>=0.3.2
 python-dotenv>=1.0.1
 
-streamlit
-langchain
-langchain-community
-faiss-cpu
-google-api-python-client
-python-dotenv
+
+
 
 streamlit
 langchain
 langchain-community
 faiss-cpu
 langchain-google-genai
+google-api-python-client
 python-dotenv
