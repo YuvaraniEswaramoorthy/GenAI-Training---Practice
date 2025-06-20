@@ -1,0 +1,334 @@
+{
+  "name": "OKR 17.06.2025 copy",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1vrCdnNrnKyxUf3nnYsUF9Vp1GBcxM-4kyzHFXYsXtFM",
+          "mode": "list",
+          "cachedResultName": "OKR_Summary_2025-06-16",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1vrCdnNrnKyxUf3nnYsUF9Vp1GBcxM-4kyzHFXYsXtFM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1vrCdnNrnKyxUf3nnYsUF9Vp1GBcxM-4kyzHFXYsXtFM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1020,
+        0
+      ],
+      "id": "3e24707d-6d3a-4f8f-82f3-fb545f84854e",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aDVfm1zbTJN9201W",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        800,
+        0
+      ],
+      "id": "c93a910b-052c-4175-87b4-66cd48347655",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1240,
+        0
+      ],
+      "id": "a28cc8fa-4f80-4c8c-81fb-aa20559c0c00",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        1460,
+        100
+      ],
+      "id": "3560328f-866c-4650-9174-4659a1cf73f2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=strictly follow exempler\nNo * or bullet symbols\nOne line per field\nClean formatting\nMatches use in Email \n\n\n\nDepartment Name: \n{{ $json[\"Dept\"] }}  \nPending: \n{{ $json[\"4th Week\"] }}  \nStatus:\n\n{{ $json[\"Status\"] }}  \nCompleted %: \n{{ $json[\"May 2025\"] }}  \nContact Dept Head:{{ $json.Mail_Id }}\nFormat the response exactly like this (each on a new line):\n\nDepartment Name: {{ $json[\"Dept\"] }}  \nPending %:  {{ $json[\"4th Week\"] }} \nStatus: {{ $json[\"Status\"] }}  \nCompleted %: {{ $json[\"May 2025\"] }} \nContact Dept Head: \n{{ $json.Mail_Id }}\n\nRegrads,\nOKR Team\n\nGive correct output as such what i have given format and content\nNo * or bullet symbols\n\nOne line per field\n\nClean formatting\n\n\n\nMatches use in Email \n\n\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        -60
+      ],
+      "id": "3018e986-bfef-499f-b069-1ce143483ccf",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1700,
+        120
+      ],
+      "id": "df5b1fc3-2a03-45df-a976-5321f4f4cef7",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "UY5gKAkfIpTzJ3xa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['Mail_Id'] }}",
+        "subject": "Report",
+        "emailType": "text",
+        "message": "=OKR Summary  \n{{ $json.output }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2400,
+        100
+      ],
+      "id": "9f6d5bdb-6406-4639-987c-31caa31e3f47",
+      "name": "Gmail4",
+      "webhookId": "2cc316dc-9801-4cb7-ac28-e02a5b8868f4",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "hmnwWbUjjyLduHml",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d9e6ffaa-3774-4758-9e90-62cbf06214fb",
+              "name": "Mail_Id",
+              "value": "={{ $('Google Sheets').item.json.Mail_Id }}",
+              "type": "string"
+            },
+            {
+              "id": "0312a6d7-0302-41ea-92b5-c7b216ca3c06",
+              "name": "output",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2040,
+        -60
+      ],
+      "id": "6b36d415-cf73-40ab-a0bf-fe09e39fd627",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Edit Fields').item.json['output']}} I want to convert to audio take one ouput to send",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        2620,
+        100
+      ],
+      "id": "4adc873a-f38a-42b2-a555-bea6117586c1",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2640,
+        320
+      ],
+      "id": "5777709d-4215-4b21-add0-5eb4ee66b7cd",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "UY5gKAkfIpTzJ3xa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Gmail4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail4": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "27cde834-c681-44b3-8be5-bf54c524b433",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0598d0039bf43133105622aae920127d92a92feac9b113a7a612ef06f845948c"
+  },
+  "id": "Hw5T49teWBBybPEb",
+  "tags": []
+}

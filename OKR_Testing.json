@@ -1,0 +1,350 @@
+{
+  "name": "OKR Testing",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4ba106a4-3b76-4121-8a08-3c041c91eca2",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1vrCdnNrnKyxUf3nnYsUF9Vp1GBcxM-4kyzHFXYsXtFM",
+          "mode": "list",
+          "cachedResultName": "OKR_Summary_2025-06-16",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1vrCdnNrnKyxUf3nnYsUF9Vp1GBcxM-4kyzHFXYsXtFM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1vrCdnNrnKyxUf3nnYsUF9Vp1GBcxM-4kyzHFXYsXtFM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        220,
+        0
+      ],
+      "id": "b55c17ab-f087-44a4-ba64-f2f0a7b24441",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aDVfm1zbTJN9201W",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "summarizationMethodAndPrompts": {
+            "values": {
+              "prompt": "Write a concise summary of the following:\n\n\n\"{text}\" only the progress report summary \n\nCONCISE SUMMARY:"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainSummarization",
+      "typeVersion": 2.1,
+      "position": [
+        440,
+        0
+      ],
+      "id": "e8cc95ea-2a2f-4e5a-8561-d4dc6c1f9316",
+      "name": "Summarization Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        540,
+        220
+      ],
+      "id": "da7ee3b8-7931-4150-b0cf-96117d15cb50",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "GlW5AFEwp3L7ueAo",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "xi-api-key",
+              "value": "sk_9f2b5b8103d60c65a367e1930add4e4d88e829cc75cd89e7"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"text\": \"Hello, this is now powered by turbo_v2.5 with expanded language support.\",\n  \"model_id\": \"eleven_turbo_v2_5\",\n  \"voice_settings\": {\n    \"stability\": 0.5,\n    \"similarity_boost\": 0.5\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "speech.mp3"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        840,
+        20
+      ],
+      "id": "572ce23e-12c1-4b33-a35d-65b730db1abb",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1vrCdnNrnKyxUf3nnYsUF9Vp1GBcxM-4kyzHFXYsXtFM",
+          "mode": "list",
+          "cachedResultName": "OKR_Summary_2025-06-16",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1vrCdnNrnKyxUf3nnYsUF9Vp1GBcxM-4kyzHFXYsXtFM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1vrCdnNrnKyxUf3nnYsUF9Vp1GBcxM-4kyzHFXYsXtFM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1060,
+        20
+      ],
+      "id": "13767065-be4e-433f-89f5-e607b22596b2",
+      "name": "Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "aDVfm1zbTJN9201W",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1280,
+        20
+      ],
+      "id": "84be3b36-8b14-4b82-abdb-5166063cac0e",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        1720,
+        140
+      ],
+      "id": "581d8f79-a09c-49df-a74f-557ca35befa4"
+    },
+    {
+      "parameters": {
+        "operation": "sendAudio",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1500,
+        -80
+      ],
+      "id": "04bf084b-173c-4375-8810-3bd0548c64cc",
+      "name": "Telegram1",
+      "webhookId": "ffd0d257-dd46-41ca-a96b-317bc3b93164"
+    },
+    {
+      "parameters": {
+        "operation": "sendAudio",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1774,
+        -80
+      ],
+      "id": "27cf3929-c0c8-4c52-b3f2-2807f4e5f57a",
+      "name": "Telegram",
+      "webhookId": "21b32606-044d-48b6-9f9b-191d04f15a05"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Summarization Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Summarization Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarization Chain": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram1": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8b15a830-e525-49c8-9c54-56110dbacaa5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0598d0039bf43133105622aae920127d92a92feac9b113a7a612ef06f845948c"
+  },
+  "id": "neJbO1Pq2ednpJWf",
+  "tags": []
+}
